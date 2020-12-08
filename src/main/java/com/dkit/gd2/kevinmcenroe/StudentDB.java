@@ -1,3 +1,4 @@
+// Kevin McEnroe D00242092
 package com.dkit.gd2.kevinmcenroe;
 
 import java.io.*;
@@ -9,7 +10,6 @@ public class StudentDB {
     private ArrayList<Student> students;
     private static Scanner keyboard = new Scanner(System.in);
 
-    // test comment
     public StudentDB() {
         this.students = new ArrayList<>();
     }
