@@ -61,6 +61,8 @@ public class App
                     case DISPLAY_STUDENT_MENU:
                         doStudentMainMenuLoop(studentDB);
                         break;
+                    case DISPLAY_BOOKING_MENU:
+                        break;
                 }
             }
             catch(InputMismatchException ime)
@@ -96,6 +98,9 @@ public class App
                         break; // exit the loop
                     case ADD_STUDENT:
                         studentDB.addStudent();
+                        break;
+                    case EDIT_STUDENT:
+                        studentDB.editStudent();
                         break;
                     case DELETE_STUDENT:
                         studentDB.deleteStudent();
