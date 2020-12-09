@@ -62,6 +62,8 @@ public class App
                         doStudentMainMenuLoop(studentDB);
                         break;
                     case DISPLAY_BOOKING_MENU:
+                        ComputerBookingDB bookingDB = new ComputerBookingDB();
+                        doComputerBookingMainMenuLoop(bookingDB);
                         break;
                 }
             }
@@ -136,5 +138,55 @@ public class App
             System.out.println("\t" + Colours.BLUE + i + ". " + StudentMainMenu.values()[i].toString() + Colours.RESET);
         }
         System.out.println("Enter a number to select the option");
+    }
+
+    private void printComputerBookingMainMenu()
+    {
+        System.out.println("\n Options to select:");
+        for(int i=0; i < ComputerBookingMainMenu.values().length; i++)
+        {
+            System.out.println("\t" + Colours.BLUE + i + ". " + ComputerBookingMainMenu.values()[i].toString() + Colours.RESET);
+        }
+        System.out.println("Enter a number to select the option");
+    }
+
+    private void doComputerBookingMainMenuLoop(ComputerBookingDB bookingDB) {
+        boolean loop = true;
+        ComputerBookingMainMenu menuOption;
+        int option;
+        while(loop)
+        {
+            printComputerBookingMainMenu();
+
+            try
+            {
+                option = keyboard.nextInt();
+                keyboard.nextLine(); //Flush the buffer
+                menuOption = ComputerBookingMainMenu.values()[option];
+                switch (menuOption)
+                {
+                    case QUIT_BOOKING_MENU:
+                        loop = false;
+                        break; // exit the loop
+                    case ADD_BOOKING:
+                        bookingDB.addBooking();
+                        break;
+                    case EDIT_BOOKING:
+                        bookingDB.editBooking();
+                        break;
+                    case DELETE_BOOKING:
+                        bookingDB.deleteBooking();
+                        break;
+                    case PRINT_BOOKING:
+                        bookingDB.printBooking();
+                        break;
+                }
+            }
+            catch(InputMismatchException ime)
+            {
+                System.out.println("Please enter a valid option");
+            }
+        }
+        System.out.println(Colours.GREEN + "Thanks for using the app" + Colours.RESET);
     }
 }

@@ -238,9 +238,9 @@ public class StudentDB {
         }
     }
 
-    private Student findStudent(String nameToDelete) {
+    private Student findStudent(String searchName) {
         for(Student student : students){
-            if(student.getName().equals(nameToDelete))
+            if(student.getName().equals(searchName))
             {
                 return student;
             }

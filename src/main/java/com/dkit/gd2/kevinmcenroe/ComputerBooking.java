@@ -4,37 +4,55 @@ package com.dkit.gd2.kevinmcenroe;
 import java.util.Date;
 
 public class ComputerBooking {
-    int bookingID;
-    String bookingDateAndTime;
-    String returnDateAndTime;
+    String bookingID;
+    String bookingDateTime;
+    String returnDateTime;
     String computerType;
     String computerAssetTag;
     String studentID;
 
-    public ComputerBooking(int bookingID, String bookingDateAndTime, String returnDateAndTime, String computerType, String computerAssetTag, String studentID) {
+    public ComputerBooking(String bookingID, String bookingDateAndTime, String returnDateAndTime, String computerType, String computerAssetTag, String studentID) {
         this.bookingID = bookingID;
-        this.bookingDateAndTime = bookingDateAndTime;
-        this.returnDateAndTime = returnDateAndTime;
+        this.bookingDateTime = bookingDateAndTime;
+        this.returnDateTime = returnDateAndTime;
         this.computerType = computerType;
         this.computerAssetTag = computerAssetTag;
         this.studentID = studentID;
     }
 
-    /*
-    int currentBooking = 0;
-    private void AddStudent(Student newStudent){
-        int newBookingID = currentBooking++;
-        Date dateAndTime = java.util.Calendar.getInstance().getTime();;
-        //ComputerBooking newBooking = new ComputerBooking(newBookingID, dateAndTime);
+    @Override
+    public String toString() {
+        return "ComputerBooking{" +
+                "bookingID='" + bookingID + '\'' +
+                ", bookingDateTime='" + bookingDateTime + '\'' +
+                ", returnDateTime='" + returnDateTime + '\'' +
+                ", computerType='" + computerType + '\'' +
+                ", computerAssetTag='" + computerAssetTag + '\'' +
+                ", studentID='" + studentID + '\'' +
+                '}';
     }
 
-    private void DeleteStudent(){
-
+    public String getID() {
+        return bookingID;
     }
 
-    private void EditStudent(){
-
+    public String getDateTime() {
+        return bookingDateTime;
     }
 
-     */
+    public String getReturnDateTime() {
+        return returnDateTime;
+    }
+
+    public String getComputerType() {
+        return computerType;
+    }
+
+    public String getComputerAssetTag() {
+        return computerAssetTag;
+    }
+
+    public String getStudentID() {
+        return studentID;
+    }
 }

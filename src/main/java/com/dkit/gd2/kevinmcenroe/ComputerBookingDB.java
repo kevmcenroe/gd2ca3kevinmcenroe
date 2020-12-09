@@ -1,9 +1,7 @@
 // Kevin McEnroe D00242092
 package com.dkit.gd2.kevinmcenroe;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -11,7 +9,7 @@ public class ComputerBookingDB {
     private ArrayList<ComputerBooking> bookings;
     private static Scanner keyboard = new Scanner(System.in);
 
-    public ComputerBookingDB() {
+        public ComputerBookingDB() {
         this.bookings = new ArrayList<>();
     }
 
@@ -23,21 +21,251 @@ public class ComputerBookingDB {
             {
                 input = bookingsFile.nextLine();
                 String[] data = input.split(",");
-                String infoA = data[0];
-                int infoB = Integer.parseInt(data[1]);
-                int infoC = Integer.parseInt(data[2]);
-                String infoD = data[3];
+                String bookingID = data[0];
+                String bookingDateTime = data[1];
+                String bookingReturnDateTime = data[2];
+                String bookingComputerType = data[3];
+                String bookingComputerTag = data[4];
+                String bookingStudentID = data[5];
 
-                // Rename data variables above
-                // Come back to this and clean up:
-                //Student readInStudent = new Student(name);
-                //this.students.add(readInStudent);
+                ComputerBooking readInBooking = new ComputerBooking(bookingID, bookingDateTime, bookingReturnDateTime, bookingComputerType, bookingComputerTag, bookingStudentID);
+                bookings.add(readInBooking);
             }
         }
         catch(FileNotFoundException fne)
         {
-            System.out.println("Could not load bookings. If this is the first time running the program, this could be" +
-                    " ok");
+            System.out.println("Could not load bookings. If this is the first time running the program, this could be ok");
         }
     }
+
+    public void saveBookingsToFile()
+    {
+        try(BufferedWriter bookingsFile = new BufferedWriter(new FileWriter("bookings.txt"))) {
+            for(ComputerBooking booking : bookings)
+            {
+                bookingsFile.write(booking.getID() + "," + booking.getDateTime() + "," + booking.getReturnDateTime() + "," + booking.getComputerType() + "," +booking.getComputerAssetTag() + "," + booking.getStudentID() + "\n");
+            }
+        }
+        catch(IOException ioe)
+        {
+            System.out.println(Colours.RED + "Could not save the students" +Colours.RESET);
+        }
+    }
+
+    public void deleteBookingsFromFile(ComputerBooking booking)
+    {
+        // POSSIBLE FIX - Don't create a new fileWriter, line below was originally a bw
+        // This new solution still doesn't do the trick. Try passing bufferedWriter / reader in?
+        try(BufferedReader studentsFile = new BufferedReader(new FileReader("students.txt"))) {
+            //BufferedReader bufferedWriter = new BufferedReader(new FileReader("students.txt"));
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("students.txt"));
+
+            String currentLine;
+            String studentLine = booking.getID() + "," + booking.getDateTime() + "," + booking.getReturnDateTime() + "," + booking.getComputerType() + ","  +booking.getComputerAssetTag() + "," + booking.getStudentID();
+
+            // While there are lines to read
+            while((currentLine = studentsFile.readLine()) != null){
+                String trimmedLine = currentLine.trim();
+                if(trimmedLine.equals(studentLine)){
+                    currentLine = "";
+                }
+                bufferedWriter.write(currentLine + System.getProperty("line.separator")); // Essentially adding a new blank line after the current one using "\n"
+
+            }
+        }
+        catch(IOException ioe)
+        {
+            System.out.println(Colours.RED + "Could not save the students" +Colours.RESET);
+        }
+    }
+
+    public void addBooking() {
+        System.out.println(Colours.GREEN + "Adding booking..." + Colours.RESET);
+        String bookingID = loopUntilValidIDEntry("id");
+        String bookingDateTime = enterField("date and time");
+        String bookingReturnDateTime = enterField("return date and time");
+        String bookingComputerType = enterField("computer type");
+        String bookingAssetTag = enterField("asset tag");
+        String bookingStudentID = enterField("student id");
+
+        ComputerBooking newBooking = new ComputerBooking(bookingID, bookingDateTime, bookingReturnDateTime, bookingComputerType, bookingAssetTag, bookingStudentID);
+        bookings.add(newBooking);
+        saveBookingsToFile();
+    }
+
+    public void editBooking(){
+        ComputerBookingEditMenu editMenu;
+        System.out.println("Please enter the id of the booking you would like to edit");
+        String id = enterField("id");
+
+        ComputerBooking bookingToEdit = findStudent(id);
+        System.out.println(Colours.GREEN + bookingToEdit + Colours.RESET);
+        System.out.println("Select the field you would like to edit");
+        System.out.println( Colours.BLUE +
+                "0. ID \n"
+                + "1. DATE AND TIME \n"
+                + "2. RETURN DATE AND TIME \n"
+                + "3. COMPUTER TYPE \n"
+                + "4. COMPUTER ASSET TAG \n"
+                + "5. STUDENT ID" + Colours.RESET);
+
+        String menuInput = keyboard.nextLine();
+        int fieldSelected = -1;
+        try {
+            if (menuInput.isEmpty() || menuInput.length() > 1) {
+                throw new IllegalArgumentException();
+            } else {
+                fieldSelected = Integer.parseInt(menuInput);
+            }
+        }
+        catch(IllegalArgumentException iae)
+        {
+            System.out.println("Please enter a valid option");
+        }
+
+        System.out.println("Please enter a replacement value");
+        String replacementInput = keyboard.nextLine();
+
+        editMenu = ComputerBookingEditMenu.values()[fieldSelected];
+        switch (editMenu)
+        {
+            case ID:
+
+                System.out.println(Colours.GREEN + "Edited " + bookingToEdit.getID() + "'s ID from " + bookingToEdit.getID() + " to " + replacementInput + Colours.RESET);
+                bookingToEdit.bookingID = replacementInput;
+                break;
+            case DATE_AND_TIME:
+                System.out.println(Colours.GREEN + "Edited " + bookingToEdit.getID() + "'s DATE AND TIME from " + bookingToEdit.getDateTime() + " to " + replacementInput + Colours.RESET);
+                bookingToEdit.bookingDateTime = replacementInput;
+                break;
+            case RETURN_DATE_AND_TIME:
+                System.out.println(Colours.GREEN + "Edited " + bookingToEdit.getID() + "'s RETURN DATE AND TIME from " + bookingToEdit.getReturnDateTime() + " to " + replacementInput + Colours.RESET);
+                bookingToEdit.returnDateTime = replacementInput;
+                break;
+            case COMPUTER_TYPE:
+                System.out.println(Colours.GREEN + "Edited " + bookingToEdit.getID() + "'s COMPUTER TYPE from " + bookingToEdit.getComputerType() + " to " + replacementInput + Colours.RESET);
+                bookingToEdit.computerType = replacementInput;
+                break;
+            case COMPUTER_ASSET_TAG:
+                System.out.println(Colours.GREEN + "Edited " + bookingToEdit.getID() + "'s COMPUTER ASSET TAG from " + bookingToEdit.getComputerAssetTag() + " to " + replacementInput + Colours.RESET);
+                bookingToEdit.computerAssetTag = replacementInput;
+                break;
+            case STUDENT_ID:
+                System.out.println(Colours.GREEN + "Edited " + bookingToEdit.getID() + "'s STUDENT ID from " + bookingToEdit.getStudentID() + " to " + replacementInput + Colours.RESET);
+                bookingToEdit.studentID = replacementInput;
+                break;
+        }
+
+        saveBookingsToFile();
+    }
+
+    // Checks that the ID is unique, in turn preventing duplicate students
+    private boolean checkStudentIDValidity(String proposedID){
+        for(ComputerBooking booking : bookings){
+            if(booking.getID().equals(proposedID))
+                return false;    // A match has been found. This studentID is already in use
+        }
+
+        return true;
+    }
+
+
+    private String enterField(String field) {
+        String input;
+        System.out.print("Please enter booking " + field + " :>");
+
+        // Don't need a try here because input will always be a string, therefore incorrect input types won't happen
+
+        input = keyboard.nextLine();
+        return input;
+    }
+
+    private String loopUntilValidIDEntry(String idField){
+        boolean loop = true;
+
+        while(loop)
+        {
+            try{
+                String inputID = enterField(idField);
+
+                if(checkStudentIDValidity(inputID)){
+
+                    return inputID;
+                }
+                else
+                {
+                    throw new IOException("Invalid ID");
+                }
+            }
+            catch(IOException ioe)
+            {
+                System.out.println(Colours.RED + "ID already in use. Please enter a unique ID" + Colours.RESET);
+            }
+        }
+        return Colours.RED + "Invalid ID" + Colours.RESET;
+    }
+
+    private int loopUntilValidIntEntry(String intField){
+        boolean loop = true;
+        while(loop)
+        {
+            try{
+                if(intField.equals("id")) {
+                    //String unhyphenated = intField.replaceAll("[-,]", "");
+                    int id = Integer.parseInt(enterField(intField));
+                    return id;
+                }
+            }
+            catch(NumberFormatException nfe)
+            {
+                System.out.println(Colours.RED + "Please enter an integer for this variable" + Colours.RESET);
+            }
+        }
+        return -1;
+    }
+
+    public void deleteBooking() {
+        System.out.println(Colours.GREEN + "Deleting student..." + Colours.RESET);
+
+        if(this.bookings != null)
+        {
+            String nameToDelete = enterField("name to delete");
+            ComputerBooking bookingToDelete = findStudent(nameToDelete);
+            if(bookingToDelete != null)
+            {
+                bookings.remove(bookingToDelete);
+                deleteBookingsFromFile(bookingToDelete);
+                System.out.println(Colours.GREEN + "Deleted " + bookingToDelete + Colours.RESET);
+            }
+            else
+            {
+                System.out.println(Colours.RED + "That booking does not exist" + Colours.RESET);
+            }
+        }
+    }
+
+    private ComputerBooking findStudent(String searchID) {
+        for(ComputerBooking booking : bookings){
+            if(booking.getID().equals(searchID))
+            {
+                return booking;
+            }
+        }
+        return null;
+    }
+
+    public void printBooking() {
+        System.out.println(Colours.GREEN + "Printing booking..." + Colours.RESET);
+        String nameToPrint = enterField("id to print");
+        ComputerBooking bookingToPrint = findStudent(nameToPrint);
+        if(bookingToPrint != null)
+        {
+            System.out.println(Colours.GREEN + bookingToPrint + Colours.RESET);
+        }
+        else
+        {
+            System.out.println(Colours.RED + "That booking does not exist" + Colours.RESET);
+        }
+    }
+
 }
