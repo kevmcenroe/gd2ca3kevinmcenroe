@@ -43,7 +43,7 @@ public class StudentDB {
         try(BufferedWriter studentsFile = new BufferedWriter(new FileWriter("students.txt"))) {
             for(Student student : students)
             {
-                studentsFile.write(student.getName() + "," + student.getId() + "," + student.getEmail() + "," + student.getTelephone() + "," +student.getComputersOnLoan() +"\n");
+                studentsFile.write(student.getName() + "," + student.getID() + "," + student.getEmail() + "," + student.getTelephone() + "," +student.getComputersOnLoan() +"\n");
             }
         }
         catch(IOException ioe)
@@ -61,7 +61,7 @@ public class StudentDB {
                 BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("students.txt"));
 
                 String currentLine;
-                String studentLine = student.getName() + "," + student.getId() + "," + student.getEmail() + "," + student.getTelephone() + student.getComputersOnLoan();
+                String studentLine = student.getName() + "," + student.getID() + "," + student.getEmail() + "," + student.getTelephone() + student.getComputersOnLoan();
 
                 // While there are lines to read
                 while((currentLine = studentsFile.readLine()) != null){
@@ -94,69 +94,74 @@ public class StudentDB {
 
     public void editStudent(){
         StudentEditMenu editMenu;
-        System.out.println("Please enter the name of the student you would like to edit");
-        String name = enterField("name");
+        System.out.println("Please enter the ID of the student you would like to edit");
+        String id = enterField("id");
 
-        Student studentToEdit = findStudent(name);
-        System.out.println(Colours.GREEN + studentToEdit + Colours.RESET);
-        System.out.println("Select the field you would like to edit");
-        System.out.println( Colours.BLUE +
-                "0. NAME \n"
-                + "1. ID \n"
-                + "2. EMAIL \n"
-                + "3. TELEPHONE \n"
-                + "4. COMPUTERS ON LOAN" + Colours.RESET);
+        Student studentToEdit = findStudent(id);
+        if(studentToEdit != null) {
+            System.out.println(Colours.GREEN + studentToEdit + Colours.RESET);
+            System.out.println("Select the field you would like to edit");
+            System.out.println(Colours.BLUE +
+                    "0. NAME \n"
+                    + "1. ID \n"
+                    + "2. EMAIL \n"
+                    + "3. TELEPHONE \n"
+                    + "4. COMPUTERS ON LOAN" + Colours.RESET);
 
-        String menuInput = keyboard.nextLine();
-        int fieldSelected = -1;
-        try {
-            if (menuInput.isEmpty() || menuInput.length() > 1) {
-                throw new IllegalArgumentException();
-            } else {
-                fieldSelected = Integer.parseInt(menuInput);
+            String menuInput = keyboard.nextLine();
+            int fieldSelected = -1;
+            try {
+                if (menuInput.isEmpty() || menuInput.length() > 1) {
+                    throw new IllegalArgumentException();
+                } else {
+                    fieldSelected = Integer.parseInt(menuInput);
+                }
+            } catch (IllegalArgumentException iae) {
+                System.out.println("Please enter a valid option");
             }
+
+
+            System.out.println("Please enter a replacement value");
+            String replacementInput = keyboard.nextLine();
+
+            editMenu = StudentEditMenu.values()[fieldSelected];
+            switch (editMenu) {
+                case NAME:
+
+                    System.out.println(Colours.GREEN + "Edited " + studentToEdit.getName() + "'s NAME from " + studentToEdit.getName() + " to " + replacementInput + Colours.RESET);
+                    studentToEdit.name = replacementInput;
+                    break;
+                case ID:
+                    System.out.println(Colours.GREEN + "Edited " + studentToEdit.getName() + "'s ID from " + studentToEdit.getID() + " to " + replacementInput + Colours.RESET);
+                    studentToEdit.id = replacementInput;
+                    break;
+                case EMAIL:
+                    System.out.println(Colours.GREEN + "Edited " + studentToEdit.getName() + "'s EMAIL from " + studentToEdit.getEmail() + " to " + replacementInput + Colours.RESET);
+                    studentToEdit.email = replacementInput;
+                    break;
+                case TELEPHONE:
+                    System.out.println(Colours.GREEN + "Edited " + studentToEdit.getName() + "'s TELEPHONE from " + studentToEdit.getTelephone() + " to " + replacementInput + Colours.RESET);
+                    studentToEdit.telephone = replacementInput;
+                    break;
+                case COMPUTERS_ON_LOAN:
+                    System.out.println(Colours.GREEN + "Edited " + studentToEdit.getName() + "'s COMPUTERS ON LOAN from " + studentToEdit.getComputersOnLoan() + " to " + replacementInput + Colours.RESET);
+                    studentToEdit.computersOnLoan = replacementInput;
+                    break;
+            }
+
+            saveStudentsToFile();
         }
-        catch(IllegalArgumentException iae)
+        else
         {
-            System.out.println("Please enter a valid option");
+            System.out.println(Colours.RED + "This student name does not exist" + Colours.RESET);
+            //editStudent();  // Recursion
         }
-
-        System.out.println("Please enter a replacement value");
-        String replacementInput = keyboard.nextLine();
-
-        editMenu = StudentEditMenu.values()[fieldSelected];
-        switch (editMenu)
-        {
-            case NAME:
-
-                System.out.println(Colours.GREEN + "Edited " + studentToEdit.getName() + "'s NAME from " + studentToEdit.getName() + " to " + replacementInput + Colours.RESET);
-                studentToEdit.name = replacementInput;
-                break;
-            case ID:
-                System.out.println(Colours.GREEN + "Edited " + studentToEdit.getName() + "'s ID from " + studentToEdit.getId() + " to " + replacementInput + Colours.RESET);
-                studentToEdit.id = replacementInput;
-                break;
-            case EMAIL:
-                System.out.println(Colours.GREEN + "Edited " + studentToEdit.getName() + "'s EMAIL from " + studentToEdit.getEmail() + " to " + replacementInput + Colours.RESET);
-                studentToEdit.email = replacementInput;
-                break;
-            case TELEPHONE:
-                System.out.println(Colours.GREEN + "Edited " + studentToEdit.getName() + "'s TELEPHONE from " + studentToEdit.getTelephone() + " to " + replacementInput + Colours.RESET);
-                studentToEdit.telephone = replacementInput;
-                break;
-            case COMPUTERS_ON_LOAN:
-                System.out.println(Colours.GREEN + "Edited " + studentToEdit.getName() + "'s COMPUTERS ON LOAN from " + studentToEdit.getComputersOnLoan() + " to " + replacementInput + Colours.RESET);
-                studentToEdit.computersOnLoan = replacementInput;
-                break;
-        }
-
-        saveStudentsToFile();
     }
 
     // Checks that the ID is unique, in turn preventing duplicate students
     private boolean checkStudentIDValidity(String proposedID){
         for(Student student : students){
-            if(student.getId().equals(proposedID))
+            if(student.getID().equals(proposedID))
                 return false;    // A match has been found. This studentID is already in use
         }
 
@@ -223,8 +228,8 @@ public class StudentDB {
 
         if(this.students != null)
         {
-            String nameToDelete = enterField("name to delete");
-            Student studentToDelete = findStudent(nameToDelete);
+            String idToDelete = enterField("id to delete");
+            Student studentToDelete = findStudent(idToDelete);
             if(studentToDelete != null)
             {
                 students.remove(studentToDelete);
@@ -238,9 +243,9 @@ public class StudentDB {
         }
     }
 
-    private Student findStudent(String searchName) {
+    private Student findStudent(String searchID) {
         for(Student student : students){
-            if(student.getName().equals(searchName))
+            if(student.getID().equals(searchID))
             {
                 return student;
             }
@@ -250,8 +255,8 @@ public class StudentDB {
 
     public void printStudent() {
         System.out.println(Colours.GREEN + "Printing student..." + Colours.RESET);
-        String nameToPrint = enterField("name to print");
-        Student studentToPrint = findStudent(nameToPrint);
+        String idToPrint = enterField("id to print");
+        Student studentToPrint = findStudent(idToPrint);
         if(studentToPrint != null)
         {
             System.out.println(Colours.GREEN + studentToPrint + Colours.RESET);

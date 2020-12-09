@@ -6,5 +6,7 @@ public enum ComputerBookingMainMenu {
     ADD_BOOKING,
     EDIT_BOOKING,
     DELETE_BOOKING,
-    PRINT_BOOKING;
+    PRINT_BOOKING,
+    PRINT_ALL_BOOKINGS,
+    PRINT_BOOKINGS_FOR_STUDENT;
 }

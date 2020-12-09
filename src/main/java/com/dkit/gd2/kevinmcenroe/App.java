@@ -126,32 +126,32 @@ public class App
 
     private void printMainMenu()
     {
-        System.out.println("\n Options to select:");
+        System.out.println("\nOptions to select:");
         for(int i=0; i < MainMenu.values().length; i++)
         {
             System.out.println("\t" + Colours.BLUE + i + ". " + MainMenu.values()[i].toString() + Colours.RESET);
         }
-        System.out.println("Enter a number to select the option");
+        System.out.println("Enter a number to select an option");
     }
 
     public static void printStudentMainMenu()
     {
-        System.out.println("\n Options to select:");
+        System.out.println("\nOptions to select:");
         for(int i=0; i < StudentMainMenu.values().length; i++)
         {
             System.out.println("\t" + Colours.BLUE + i + ". " + StudentMainMenu.values()[i].toString() + Colours.RESET);
         }
-        System.out.println("Enter a number to select the option");
+        System.out.println("Enter a number to select an option");
     }
 
     private void printComputerBookingMainMenu()
     {
-        System.out.println("\n Options to select:");
+        System.out.println("\n Menu Options:");
         for(int i=0; i < ComputerBookingMainMenu.values().length; i++)
         {
             System.out.println("\t" + Colours.BLUE + i + ". " + ComputerBookingMainMenu.values()[i].toString() + Colours.RESET);
         }
-        System.out.println("Enter a number to select the option");
+        System.out.println("Enter the corresponding number to select an option");
     }
 
     private void doComputerBookingMainMenuLoop(ComputerBookingDB bookingDB) {
@@ -183,6 +183,12 @@ public class App
                         break;
                     case PRINT_BOOKING:
                         bookingDB.printBooking();
+                        break;
+                    case PRINT_ALL_BOOKINGS:
+                        bookingDB.printAllBookings();
+                        break;
+                    case PRINT_BOOKINGS_FOR_STUDENT:
+                        bookingDB.printBookingsForStudent();
                         break;
                 }
             }

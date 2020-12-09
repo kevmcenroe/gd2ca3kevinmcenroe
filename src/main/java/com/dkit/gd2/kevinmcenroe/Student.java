@@ -22,7 +22,7 @@ public class Student {
         return name;
     }
 
-    public String getId() {
+    public String getID() {
         return id;
     }
 
