@@ -317,7 +317,7 @@ public class ComputerBookingDB {
 
     public void printAverageBookingLength()
     {
-        // Create an array of equal size to bookings, i.e. for 1 length per booking
+        // Create an array of equal size to bookings, i.e. for 1 length value per booking
         long[] bookingLengths = new long[bookings.size()];
         int lengthsRegistered = 0;
         for(ComputerBooking booking : bookings)
@@ -325,6 +325,7 @@ public class ComputerBookingDB {
             LocalDate lendDate = LocalDate.parse(booking.getDateTime());
             LocalDate returnDate = LocalDate.parse(booking.getReturnDateTime());
             long bookingLength = ChronoUnit.DAYS.between(lendDate, returnDate);
+            System.out.println("Length of booking of ID " + booking.getID() + ": " + bookingLength + " days");
             bookingLengths[lengthsRegistered] = bookingLength;
             lengthsRegistered++;
         }
@@ -335,6 +336,6 @@ public class ComputerBookingDB {
         }
         long averageLength = sum / bookings.size();
 
-        System.out.println(Colours.GREEN + "Average booking length is " + averageLength + " days");
+        System.out.println(Colours.GREEN + "Average booking length is " + averageLength + " days" + Colours.RESET);
     }
 }

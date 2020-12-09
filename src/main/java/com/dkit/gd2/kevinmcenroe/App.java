@@ -190,6 +190,9 @@ public class App
                     case PRINT_BOOKINGS_FOR_STUDENT:
                         bookingDB.printBookingsForStudent();
                         break;
+                    case PRINT_AVERAGE_BOOKING_LENGTH:
+                        bookingDB.printAverageBookingLength();
+                        break;
                 }
             }
             catch(InputMismatchException ime)
