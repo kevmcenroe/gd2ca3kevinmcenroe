@@ -90,6 +90,8 @@ public class StudentDB {
         Student newStudent = new Student(name, id, email, telephone, computersOnLoan);
         students.add(newStudent);
         saveStudentsToFile();
+
+        System.out.println(Colours.GREEN + "Added student: " + newStudent + Colours.RESET);
     }
 
     public void editStudent(){
