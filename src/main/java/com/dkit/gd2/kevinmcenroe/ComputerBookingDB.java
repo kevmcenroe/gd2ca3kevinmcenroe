@@ -3,6 +3,7 @@ package com.dkit.gd2.kevinmcenroe;
 
 import java.io.*;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
@@ -287,7 +288,7 @@ public class ComputerBookingDB {
     public void printBookingsForStudent(){
         String studentID = loopUntilValidIDEntry("student ID");
         int matchesFound = 0;
-        ArrayList<ComputerBooking> studentBookings = new ArrayList<ComputerBooking>();
+        ArrayList<ComputerBooking> studentBookings = new ArrayList<>();
 
         for(ComputerBooking booking : bookings)
         {
@@ -301,7 +302,7 @@ public class ComputerBookingDB {
         if(matchesFound != 0)
         {
             DateTimeComparison dateTimeCompare = new DateTimeComparison();
-            Collections.sort(studentBookings, dateTimeCompare);     // Use the comparator to sort the times
+            Collections.sort(studentBookings, dateTimeCompare);     // Use the comparator to sort the times using dateTimeCompare
 
             for(ComputerBooking sortedBooking : studentBookings)
             {
@@ -312,5 +313,28 @@ public class ComputerBookingDB {
         {
             System.out.println(Colours.RED + "No bookings found for student of ID: " + studentID + Colours.RESET);
         }
+    }
+
+    public void printAverageBookingLength()
+    {
+        // Create an array of equal size to bookings, i.e. for 1 length per booking
+        long[] bookingLengths = new long[bookings.size()];
+        int lengthsRegistered = 0;
+        for(ComputerBooking booking : bookings)
+        {
+            LocalDate lendDate = LocalDate.parse(booking.getDateTime());
+            LocalDate returnDate = LocalDate.parse(booking.getReturnDateTime());
+            long bookingLength = ChronoUnit.DAYS.between(lendDate, returnDate);
+            bookingLengths[lengthsRegistered] = bookingLength;
+            lengthsRegistered++;
+        }
+
+        long sum = 0;
+        for(long length : bookingLengths){
+            sum += length;
+        }
+        long averageLength = sum / bookings.size();
+
+        System.out.println(Colours.GREEN + "Average booking length is " + averageLength + " days");
     }
 }
