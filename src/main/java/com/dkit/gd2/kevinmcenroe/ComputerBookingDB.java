@@ -2,7 +2,9 @@
 package com.dkit.gd2.kevinmcenroe;
 
 import java.io.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
 public class ComputerBookingDB {
@@ -82,8 +84,8 @@ public class ComputerBookingDB {
     public void addBooking() {
         System.out.println(Colours.GREEN + "Adding booking..." + Colours.RESET);
         String bookingID = loopUntilValidIDEntry("id");
-        String bookingDateTime = enterField("date and time");
-        String bookingReturnDateTime = enterField("return date and time");
+        String bookingDateTime = enterField("date and time in yyyy-MM-dd format");
+        String bookingReturnDateTime = enterField("return date and time in yyyy-MM-dd format");
         String bookingComputerType = enterField("computer type");
         String bookingAssetTag = enterField("asset tag");
         String bookingStudentID = enterField("student id");
@@ -283,16 +285,32 @@ public class ComputerBookingDB {
     }
 
     public void printBookingsForStudent(){
-        String studentID = loopUntilValidIDEntry("id");
+        String studentID = loopUntilValidIDEntry("student ID");
         int matchesFound = 0;
+        ArrayList<ComputerBooking> studentBookings = new ArrayList<ComputerBooking>();
+
         for(ComputerBooking booking : bookings)
         {
-            if(booking.getStudentID() == studentID) {
-                System.out.println(Colours.GREEN + booking + Colours.RESET);
+            if(booking.getStudentID().equals(studentID)) {
+
+                LocalDate dateTime = LocalDate.parse(booking.getDateTime());
+                studentBookings.add(booking);
                 matchesFound++;
             }
         }
-        if(matchesFound == 0)
+        if(matchesFound != 0)
+        {
+            DateTimeComparison dateTimeCompare = new DateTimeComparison();
+            Collections.sort(studentBookings, dateTimeCompare);     // Use the comparator to sort the times
+
+            for(ComputerBooking sortedBooking : studentBookings)
+            {
+                System.out.println(Colours.GREEN + sortedBooking + Colours.RESET);
+            }
+        }
+        else
+        {
             System.out.println(Colours.RED + "No bookings found for student of ID: " + studentID + Colours.RESET);
+        }
     }
 }
