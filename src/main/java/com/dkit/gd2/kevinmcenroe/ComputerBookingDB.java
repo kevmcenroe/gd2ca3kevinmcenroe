@@ -48,7 +48,7 @@ public class ComputerBookingDB {
         }
         catch(IOException ioe)
         {
-            System.out.println(Colours.RED + "Could not save the students" +Colours.RESET);
+            System.out.println(Colours.RED + "Could not save the bookings" +Colours.RESET);
         }
     }
 
@@ -56,17 +56,17 @@ public class ComputerBookingDB {
     {
         // POSSIBLE FIX - Don't create a new fileWriter, line below was originally a bw
         // This new solution still doesn't do the trick. Try passing bufferedWriter / reader in?
-        try(BufferedReader studentsFile = new BufferedReader(new FileReader("students.txt"))) {
-            //BufferedReader bufferedWriter = new BufferedReader(new FileReader("students.txt"));
-            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("students.txt"));
+        try(BufferedReader bookingsFile = new BufferedReader(new FileReader("bookings.txt"))) {
+            //BufferedReader bufferedWriter = new BufferedReader(new FileReader("bookings.txt"));
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("bookings.txt"));
 
             String currentLine;
-            String studentLine = booking.getID() + "," + booking.getDateTime() + "," + booking.getReturnDateTime() + "," + booking.getComputerType() + ","  +booking.getComputerAssetTag() + "," + booking.getStudentID();
+            String bookingLine = booking.getID() + "," + booking.getDateTime() + "," + booking.getReturnDateTime() + "," + booking.getComputerType() + ","  +booking.getComputerAssetTag() + "," + booking.getStudentID();
 
             // While there are lines to read
-            while((currentLine = studentsFile.readLine()) != null){
+            while((currentLine = bookingsFile.readLine()) != null){
                 String trimmedLine = currentLine.trim();
-                if(trimmedLine.equals(studentLine)){
+                if(trimmedLine.equals(bookingLine)){
                     currentLine = "";
                 }
                 bufferedWriter.write(currentLine + System.getProperty("line.separator")); // Essentially adding a new blank line after the current one using "\n"
@@ -75,7 +75,7 @@ public class ComputerBookingDB {
         }
         catch(IOException ioe)
         {
-            System.out.println(Colours.RED + "Could not save the students" +Colours.RESET);
+            System.out.println(Colours.RED + "Could not save the bookings" +Colours.RESET);
         }
     }
 
@@ -98,7 +98,7 @@ public class ComputerBookingDB {
         System.out.println("Please enter the id of the booking you would like to edit");
         String id = enterField("id");
 
-        ComputerBooking bookingToEdit = findStudent(id);
+        ComputerBooking bookingToEdit = findBooking(id);
         System.out.println(Colours.GREEN + bookingToEdit + Colours.RESET);
         System.out.println("Select the field you would like to edit");
         System.out.println( Colours.BLUE +
@@ -159,11 +159,11 @@ public class ComputerBookingDB {
         saveBookingsToFile();
     }
 
-    // Checks that the ID is unique, in turn preventing duplicate students
-    private boolean checkStudentIDValidity(String proposedID){
+    // Checks that the ID is unique, in turn preventing duplicate bookings
+    private boolean checkBookingIDValidity(String proposedID){
         for(ComputerBooking booking : bookings){
             if(booking.getID().equals(proposedID))
-                return false;    // A match has been found. This studentID is already in use
+                return false;
         }
 
         return true;
@@ -188,7 +188,7 @@ public class ComputerBookingDB {
             try{
                 String inputID = enterField(idField);
 
-                if(checkStudentIDValidity(inputID)){
+                if(checkBookingIDValidity(inputID)){
 
                     return inputID;
                 }
@@ -225,12 +225,12 @@ public class ComputerBookingDB {
     }
 
     public void deleteBooking() {
-        System.out.println(Colours.GREEN + "Deleting student..." + Colours.RESET);
+        System.out.println(Colours.GREEN + "Deleting booking..." + Colours.RESET);
 
         if(this.bookings != null)
         {
             String nameToDelete = enterField("name to delete");
-            ComputerBooking bookingToDelete = findStudent(nameToDelete);
+            ComputerBooking bookingToDelete = findBooking(nameToDelete);
             if(bookingToDelete != null)
             {
                 bookings.remove(bookingToDelete);
@@ -244,7 +244,7 @@ public class ComputerBookingDB {
         }
     }
 
-    private ComputerBooking findStudent(String searchID) {
+    private ComputerBooking findBooking(String searchID) {
         for(ComputerBooking booking : bookings){
             if(booking.getID().equals(searchID))
             {
@@ -257,7 +257,7 @@ public class ComputerBookingDB {
     public void printBooking() {
         System.out.println(Colours.GREEN + "Printing booking..." + Colours.RESET);
         String nameToPrint = enterField("id to print");
-        ComputerBooking bookingToPrint = findStudent(nameToPrint);
+        ComputerBooking bookingToPrint = findBooking(nameToPrint);
         if(bookingToPrint != null)
         {
             System.out.println(Colours.GREEN + bookingToPrint + Colours.RESET);

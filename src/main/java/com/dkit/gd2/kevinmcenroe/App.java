@@ -24,11 +24,16 @@ public class App
         System.out.println(Colours.GREEN + "Welcome to the playerDB App" + Colours.RESET);
         StudentDB studentDB = new StudentDB();
         studentDB.loadStudentsFromFile();
-        doMainMenuLoop(studentDB);
         studentDB.saveStudentsToFile();
+
+        ComputerBookingDB bookingDB = new ComputerBookingDB();
+        bookingDB.loadBookingsFromFile();
+        bookingDB.saveBookingsToFile();
+
+        doMainMenuLoop(studentDB, bookingDB);
     }
 
-    private void doMainMenuLoop(StudentDB studentDB)
+    private void doMainMenuLoop(StudentDB studentDB, ComputerBookingDB bookingDB)
     {
         boolean loop = true;
         MainMenu menuOption;
@@ -62,7 +67,6 @@ public class App
                         doStudentMainMenuLoop(studentDB);
                         break;
                     case DISPLAY_BOOKING_MENU:
-                        ComputerBookingDB bookingDB = new ComputerBookingDB();
                         doComputerBookingMainMenuLoop(bookingDB);
                         break;
                 }
