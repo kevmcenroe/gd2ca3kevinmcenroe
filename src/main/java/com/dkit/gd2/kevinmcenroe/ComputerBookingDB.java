@@ -158,7 +158,7 @@ public class ComputerBookingDB {
         }
         else
         {
-            System.out.println(Colours.RED + "Invalid booking id" + Colours.RESET);
+            System.out.println(Colours.RED + "This booking ID does not exist" + Colours.RESET);
         }
     }
 
@@ -276,10 +276,23 @@ public class ComputerBookingDB {
 
         if(bookings.size() > 0)
             for(ComputerBooking booking : bookings){
-                System.out.println(Colours.GREEN + booking + Colours.RESET + "\n");
+                System.out.println(Colours.GREEN + booking + Colours.RESET);
             }
         else
             System.out.println(Colours.RED + "Cannot print all bookings as no bookings exist. Please create bookings" + Colours.RESET);
+    }
 
+    public void printBookingsForStudent(){
+        String studentID = loopUntilValidIDEntry("id");
+        int matchesFound = 0;
+        for(ComputerBooking booking : bookings)
+        {
+            if(booking.getStudentID() == studentID) {
+                System.out.println(Colours.GREEN + booking + Colours.RESET);
+                matchesFound++;
+            }
+        }
+        if(matchesFound == 0)
+            System.out.println(Colours.RED + "No bookings found for student of ID: " + studentID + Colours.RESET);
     }
 }
