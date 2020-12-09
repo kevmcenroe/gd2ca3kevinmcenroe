@@ -99,64 +99,67 @@ public class ComputerBookingDB {
         String id = enterField("id");
 
         ComputerBooking bookingToEdit = findBooking(id);
-        System.out.println(Colours.GREEN + bookingToEdit + Colours.RESET);
-        System.out.println("Select the field you would like to edit");
-        System.out.println( Colours.BLUE +
-                "0. ID \n"
-                + "1. DATE AND TIME \n"
-                + "2. RETURN DATE AND TIME \n"
-                + "3. COMPUTER TYPE \n"
-                + "4. COMPUTER ASSET TAG \n"
-                + "5. STUDENT ID" + Colours.RESET);
+        if(bookingToEdit != null) {
+            System.out.println(Colours.GREEN + bookingToEdit + Colours.RESET);
+            System.out.println("Select the field you would like to edit");
+            System.out.println(Colours.BLUE +
+                    "0. ID \n"
+                    + "1. DATE AND TIME \n"
+                    + "2. RETURN DATE AND TIME \n"
+                    + "3. COMPUTER TYPE \n"
+                    + "4. COMPUTER ASSET TAG \n"
+                    + "5. STUDENT ID" + Colours.RESET);
 
-        String menuInput = keyboard.nextLine();
-        int fieldSelected = -1;
-        try {
-            if (menuInput.isEmpty() || menuInput.length() > 1) {
-                throw new IllegalArgumentException();
-            } else {
-                fieldSelected = Integer.parseInt(menuInput);
+            String menuInput = keyboard.nextLine();
+            int fieldSelected = -1;
+            try {
+                if (menuInput.isEmpty() || menuInput.length() > 1) {
+                    throw new IllegalArgumentException();
+                } else {
+                    fieldSelected = Integer.parseInt(menuInput);
+                }
+            } catch (IllegalArgumentException iae) {
+                System.out.println("Please enter a valid option");
             }
+
+            System.out.println("Please enter a replacement value");
+            String replacementInput = keyboard.nextLine();
+
+            editMenu = ComputerBookingEditMenu.values()[fieldSelected];
+            switch (editMenu) {
+                case ID:
+
+                    System.out.println(Colours.GREEN + "Edited " + bookingToEdit.getID() + "'s ID from " + bookingToEdit.getID() + " to " + replacementInput + Colours.RESET);
+                    bookingToEdit.bookingID = replacementInput;
+                    break;
+                case DATE_AND_TIME:
+                    System.out.println(Colours.GREEN + "Edited " + bookingToEdit.getID() + "'s DATE AND TIME from " + bookingToEdit.getDateTime() + " to " + replacementInput + Colours.RESET);
+                    bookingToEdit.bookingDateTime = replacementInput;
+                    break;
+                case RETURN_DATE_AND_TIME:
+                    System.out.println(Colours.GREEN + "Edited " + bookingToEdit.getID() + "'s RETURN DATE AND TIME from " + bookingToEdit.getReturnDateTime() + " to " + replacementInput + Colours.RESET);
+                    bookingToEdit.returnDateTime = replacementInput;
+                    break;
+                case COMPUTER_TYPE:
+                    System.out.println(Colours.GREEN + "Edited " + bookingToEdit.getID() + "'s COMPUTER TYPE from " + bookingToEdit.getComputerType() + " to " + replacementInput + Colours.RESET);
+                    bookingToEdit.computerType = replacementInput;
+                    break;
+                case COMPUTER_ASSET_TAG:
+                    System.out.println(Colours.GREEN + "Edited " + bookingToEdit.getID() + "'s COMPUTER ASSET TAG from " + bookingToEdit.getComputerAssetTag() + " to " + replacementInput + Colours.RESET);
+                    bookingToEdit.computerAssetTag = replacementInput;
+                    break;
+                case STUDENT_ID:
+                    System.out.println(Colours.GREEN + "Edited " + bookingToEdit.getID() + "'s STUDENT ID from " + bookingToEdit.getStudentID() + " to " + replacementInput + Colours.RESET);
+                    bookingToEdit.studentID = replacementInput;
+                    break;
+            }
+
+            saveBookingsToFile();
         }
-        catch(IllegalArgumentException iae)
+        else
         {
-            System.out.println("Please enter a valid option");
+            System.out.println(Colours.RED + "Invalid booking id" + Colours.RESET);
         }
-
-        System.out.println("Please enter a replacement value");
-        String replacementInput = keyboard.nextLine();
-
-        editMenu = ComputerBookingEditMenu.values()[fieldSelected];
-        switch (editMenu)
-        {
-            case ID:
-
-                System.out.println(Colours.GREEN + "Edited " + bookingToEdit.getID() + "'s ID from " + bookingToEdit.getID() + " to " + replacementInput + Colours.RESET);
-                bookingToEdit.bookingID = replacementInput;
-                break;
-            case DATE_AND_TIME:
-                System.out.println(Colours.GREEN + "Edited " + bookingToEdit.getID() + "'s DATE AND TIME from " + bookingToEdit.getDateTime() + " to " + replacementInput + Colours.RESET);
-                bookingToEdit.bookingDateTime = replacementInput;
-                break;
-            case RETURN_DATE_AND_TIME:
-                System.out.println(Colours.GREEN + "Edited " + bookingToEdit.getID() + "'s RETURN DATE AND TIME from " + bookingToEdit.getReturnDateTime() + " to " + replacementInput + Colours.RESET);
-                bookingToEdit.returnDateTime = replacementInput;
-                break;
-            case COMPUTER_TYPE:
-                System.out.println(Colours.GREEN + "Edited " + bookingToEdit.getID() + "'s COMPUTER TYPE from " + bookingToEdit.getComputerType() + " to " + replacementInput + Colours.RESET);
-                bookingToEdit.computerType = replacementInput;
-                break;
-            case COMPUTER_ASSET_TAG:
-                System.out.println(Colours.GREEN + "Edited " + bookingToEdit.getID() + "'s COMPUTER ASSET TAG from " + bookingToEdit.getComputerAssetTag() + " to " + replacementInput + Colours.RESET);
-                bookingToEdit.computerAssetTag = replacementInput;
-                break;
-            case STUDENT_ID:
-                System.out.println(Colours.GREEN + "Edited " + bookingToEdit.getID() + "'s STUDENT ID from " + bookingToEdit.getStudentID() + " to " + replacementInput + Colours.RESET);
-                bookingToEdit.studentID = replacementInput;
-                break;
-        }
-
-        saveBookingsToFile();
     }
 
     // Checks that the ID is unique, in turn preventing duplicate bookings
@@ -268,4 +271,15 @@ public class ComputerBookingDB {
         }
     }
 
+    public void printAllBookings() {
+        System.out.println(Colours.GREEN + "Printing all bookings..." + Colours.RESET);
+
+        if(bookings.size() > 0)
+            for(ComputerBooking booking : bookings){
+                System.out.println(Colours.GREEN + booking + Colours.RESET + "\n");
+            }
+        else
+            System.out.println(Colours.RED + "Cannot print all bookings as no bookings exist. Please create bookings" + Colours.RESET);
+
+    }
 }
