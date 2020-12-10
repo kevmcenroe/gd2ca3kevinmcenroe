@@ -60,7 +60,7 @@ public class ComputerBookingDB {
     public void addBooking() {
         System.out.println(Colours.GREEN + "Adding booking..." + Colours.RESET);
         String bookingID = loopUntilValidIDEntry("id");
-        String bookingDateTime = loopUntilValidDateEntry();
+        String bookingDateTime = loopUntilValidDateEntry(false);
         String bookingComputerType = loopUntilValidComputerTypeEntry("computer type (Desktop, Laptop or Raspberry Pi)");
         String bookingAssetTag = enterField("asset tag");
         String bookingStudentID = enterField("student id");
@@ -109,13 +109,13 @@ public class ComputerBookingDB {
                     bookingToEdit.bookingID = bookingID;
                     break;
                 case DATE_AND_TIME:
-                    String bookingDateTime = loopUntilValidDateEntry();
-                    System.out.println(Colours.GREEN + "Edited " + bookingToEdit.getID() + "'s DATE AND TIME from " + bookingToEdit.getDateTime() + " to " + bookingDateTime + Colours.RESET);
+                    String bookingDateTime = loopUntilValidDateEntry(false);
+                    System.out.println(Colours.GREEN + "Edited " + bookingToEdit.getID() + "'s DATE from " + bookingToEdit.getDateTime() + " to " + bookingDateTime + Colours.RESET);
                     bookingToEdit.bookingDateTime = bookingDateTime;
                     break;
                 case RETURN_DATE_AND_TIME:
-                    String returnBookingDateTime = loopUntilValidDateEntry();
-                    System.out.println(Colours.GREEN + "Edited " + bookingToEdit.getID() + "'s RETURN DATE AND TIME from " + bookingToEdit.getReturnDateTime() + " to " + returnBookingDateTime + Colours.RESET);
+                    String returnBookingDateTime = loopUntilValidDateEntry(true);
+                    System.out.println(Colours.GREEN + "Edited " + bookingToEdit.getID() + "'s RETURN DATE from " + bookingToEdit.getReturnDateTime() + " to " + returnBookingDateTime + Colours.RESET);
                     bookingToEdit.returnDateTime = returnBookingDateTime;
                     break;
                 case COMPUTER_TYPE:
@@ -158,11 +158,14 @@ public class ComputerBookingDB {
         System.out.println("Please enter the id of the booking you would like to return");
         String id = enterField("id");
         ComputerBooking bookingToReturn = findBooking(id);
-
-        String bookingReturnDateTime = enterField("return date and time in yyyy-MM-dd format");
-        bookingToReturn.returnDateTime = bookingReturnDateTime;
-        saveBookingsToFile();
-        System.out.println(Colours.GREEN + "Booking of ID " + id + " was returned on " + bookingReturnDateTime + Colours.RESET);
+        if(bookingToReturn != null)
+        {
+            String bookingReturnDateTime = loopUntilValidDateEntry(true);
+            System.out.println("TEST TEST TEST bookingsReturnDate = " + bookingReturnDateTime);
+            bookingToReturn.returnDateTime = bookingReturnDateTime;
+            saveBookingsToFile();
+            System.out.println(Colours.GREEN + "Booking of ID " + id + " was returned on " + bookingReturnDateTime + Colours.RESET);
+        }
     }
 
     private String enterField(String field) {
@@ -217,14 +220,19 @@ public class ComputerBookingDB {
         return Colours.RED + "Invalid ID" + Colours.RESET;
     }
 
-    private String loopUntilValidDateEntry(){
+    private String loopUntilValidDateEntry(boolean isReturnDate){
         boolean loop = true;
 
         while(loop)
         {
             try{
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                String inputDate = enterField("date and time in yyyy-MM-dd format");
+                String inputDate = "";
+                if(isReturnDate)
+                    inputDate = enterField("return date in yyyy-MM-dd format");
+                else{
+                    inputDate = enterField("date in yyyy-MM-dd format");
+                }
                 dateFormat.parse(inputDate);
                 return inputDate;
             }
@@ -249,10 +257,6 @@ public class ComputerBookingDB {
                 saveBookingsToFile();
                 System.out.println(Colours.GREEN + "Deleted " + bookingToDelete + Colours.RESET);
             }
-            else
-            {
-                System.out.println(Colours.RED + "That booking does not exist" + Colours.RESET);
-            }
         }
     }
 
@@ -263,6 +267,7 @@ public class ComputerBookingDB {
                 return booking;
             }
         }
+        System.out.println(Colours.RED + "A booking of ID " + searchID + " does not exist" + Colours.RESET);
         return null;
     }
 
@@ -273,10 +278,6 @@ public class ComputerBookingDB {
         if(bookingToPrint != null)
         {
             System.out.println(Colours.GREEN + bookingToPrint + Colours.RESET);
-        }
-        else
-        {
-            System.out.println(Colours.RED + "That booking does not exist" + Colours.RESET);
         }
     }
 
