@@ -57,7 +57,7 @@ public class ComputerBookingDB {
 
     public void deleteBookingsFromFile(ComputerBooking booking)
     {
-        // POSSIBLE FIX - Don't create a new fileWriter, line below was originally a bw
+        // POSSIBLE FIX - Don't create a new fileWriter, line below was originally a bw?
         // This new solution still doesn't do the trick. Try passing bufferedWriter / reader in?
         try(BufferedReader bookingsFile = new BufferedReader(new FileReader("bookings.txt"))) {
             //BufferedReader bufferedWriter = new BufferedReader(new FileReader("bookings.txt"));
@@ -235,7 +235,7 @@ public class ComputerBookingDB {
 
         if(this.bookings != null)
         {
-            String nameToDelete = enterField("name to delete");
+            String nameToDelete = enterField("id to delete");
             ComputerBooking bookingToDelete = findBooking(nameToDelete);
             if(bookingToDelete != null)
             {

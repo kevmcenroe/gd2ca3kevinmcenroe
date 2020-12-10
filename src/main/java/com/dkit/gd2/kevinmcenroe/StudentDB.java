@@ -56,8 +56,9 @@ public class StudentDB {
     {
         // POSSIBLE FIX - Don't create a new fileWriter, line below was originally a bw
         // This new solution still doesn't do the trick. Try passing bufferedWriter / reader in?
+
         try(BufferedReader studentsFile = new BufferedReader(new FileReader("students.txt"))) {
-                //BufferedReader bufferedWriter = new BufferedReader(new FileReader("students.txt"));
+                //BufferedReader bufferedReader = new BufferedReader(new FileReader("students.txt"));
                 BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("students.txt"));
 
                 String currentLine;
@@ -65,9 +66,9 @@ public class StudentDB {
 
                 // While there are lines to read
                 while((currentLine = studentsFile.readLine()) != null){
-                    String trimmedLine = currentLine.trim();
-                    if(trimmedLine.equals(studentLine)){
-                        currentLine = "";
+                    String trimmedLine = currentLine.trim();    // Trim the line
+                    if(trimmedLine.equals(studentLine)){        // If the line is equal to the one we're looking for
+                        currentLine = "";                       // Set an overwrite string
                     }
                     bufferedWriter.write(currentLine + System.getProperty("line.separator")); // Essentially adding a new blank line after the current one using "\n"
 
@@ -75,7 +76,7 @@ public class StudentDB {
         }
         catch(IOException ioe)
         {
-            System.out.println(Colours.RED + "Could not save the students" +Colours.RESET);
+            System.out.println(Colours.RED + "Could not delete the students" +Colours.RESET);
         }
     }
 
@@ -85,7 +86,7 @@ public class StudentDB {
         String id = loopUntilValidIDEntry("id");
         String email = enterField("email");
         String telephone = Integer.toString(loopUntilValidIntEntry("telephone"));
-        String computersOnLoan = enterField("computers on loan");
+        String computersOnLoan = enterField("computers on loan, separating multiple bookings with an ampersand (&)");
 
         Student newStudent = new Student(name, id, email, telephone, computersOnLoan);
         students.add(newStudent);
