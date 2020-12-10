@@ -161,7 +161,6 @@ public class ComputerBookingDB {
         if(bookingToReturn != null)
         {
             String bookingReturnDateTime = loopUntilValidDateEntry(true);
-            System.out.println("TEST TEST TEST bookingsReturnDate = " + bookingReturnDateTime);
             bookingToReturn.returnDateTime = bookingReturnDateTime;
             saveBookingsToFile();
             System.out.println(Colours.GREEN + "Booking of ID " + id + " was returned on " + bookingReturnDateTime + Colours.RESET);
