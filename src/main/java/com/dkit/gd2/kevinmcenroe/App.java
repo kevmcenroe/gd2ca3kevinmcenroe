@@ -192,6 +192,9 @@ public class App
                     case PRINT_AVERAGE_BOOKING_LENGTH:
                         bookingDB.printAverageBookingLength();
                         break;
+                    case RETURN_BOOKED_COMPUTER:
+                        bookingDB.returnBooking();
+                        break;
                 }
             }
             catch(InputMismatchException ime)

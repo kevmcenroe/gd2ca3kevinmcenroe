@@ -86,12 +86,12 @@ public class ComputerBookingDB {
         System.out.println(Colours.GREEN + "Adding booking..." + Colours.RESET);
         String bookingID = loopUntilValidIDEntry("id");
         String bookingDateTime = enterField("date and time in yyyy-MM-dd format");
-        String bookingReturnDateTime = enterField("return date and time in yyyy-MM-dd format");
+        //String bookingReturnDateTime = enterField("return date and time in yyyy-MM-dd format");
         String bookingComputerType = enterField("computer type");
         String bookingAssetTag = enterField("asset tag");
         String bookingStudentID = enterField("student id");
 
-        ComputerBooking newBooking = new ComputerBooking(bookingID, bookingDateTime, bookingReturnDateTime, bookingComputerType, bookingAssetTag, bookingStudentID);
+        ComputerBooking newBooking = new ComputerBooking(bookingID, bookingDateTime, "", bookingComputerType, bookingAssetTag, bookingStudentID);
         bookings.add(newBooking);
         saveBookingsToFile();
     }
@@ -175,11 +175,21 @@ public class ComputerBookingDB {
         return true;
     }
 
+    public void returnBooking()
+    {
+        System.out.println("Please enter the id of the booking you would like to return");
+        String id = enterField("id");
+        ComputerBooking bookingToReturn = findBooking(id);
+
+        String bookingReturnDateTime = enterField("return date and time in yyyy-MM-dd format");
+        bookingToReturn.returnDateTime = bookingReturnDateTime;
+        saveBookingsToFile();
+        System.out.println(Colours.GREEN + "Booking of ID " + id + " was returned on " + bookingReturnDateTime + Colours.RESET);
+    }
 
     private String enterField(String field) {
         String input;
         System.out.print("Please enter booking " + field + " :>");
-
         // Don't need a try here because input will always be a string, therefore incorrect input types won't happen
 
         input = keyboard.nextLine();

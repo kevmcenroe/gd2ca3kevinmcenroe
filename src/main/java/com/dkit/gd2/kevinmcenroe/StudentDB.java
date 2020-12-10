@@ -52,34 +52,6 @@ public class StudentDB {
         }
     }
 
-    public void deleteStudentsFromFile(Student student)
-    {
-        // POSSIBLE FIX - Don't create a new fileWriter, line below was originally a bw
-        // This new solution still doesn't do the trick. Try passing bufferedWriter / reader in?
-
-        try(BufferedReader studentsFile = new BufferedReader(new FileReader("students.txt"))) {
-                //BufferedReader bufferedReader = new BufferedReader(new FileReader("students.txt"));
-                BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("students.txt"));
-
-                String currentLine;
-                String studentLine = student.getName() + "," + student.getID() + "," + student.getEmail() + "," + student.getTelephone() + student.getComputersOnLoan();
-
-                // While there are lines to read
-                while((currentLine = studentsFile.readLine()) != null){
-                    String trimmedLine = currentLine.trim();    // Trim the line
-                    if(trimmedLine.equals(studentLine)){        // If the line is equal to the one we're looking for
-                        currentLine = "";                       // Set an overwrite string
-                    }
-                    bufferedWriter.write(currentLine + System.getProperty("line.separator")); // Essentially adding a new blank line after the current one using "\n"
-
-            }
-        }
-        catch(IOException ioe)
-        {
-            System.out.println(Colours.RED + "Could not delete the students" +Colours.RESET);
-        }
-    }
-
      public void addStudent() {
         System.out.println(Colours.GREEN + "Adding student..." + Colours.RESET);
         String name = enterField("name");
@@ -236,7 +208,7 @@ public class StudentDB {
             if(studentToDelete != null)
             {
                 students.remove(studentToDelete);
-                deleteStudentsFromFile(studentToDelete);
+                saveStudentsToFile();
                 System.out.println(Colours.GREEN + "Deleted " + studentToDelete + Colours.RESET);
             }
             else
