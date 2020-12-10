@@ -2,6 +2,8 @@
 package com.dkit.gd2.kevinmcenroe;
 
 import java.io.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -58,8 +60,7 @@ public class ComputerBookingDB {
     public void addBooking() {
         System.out.println(Colours.GREEN + "Adding booking..." + Colours.RESET);
         String bookingID = loopUntilValidIDEntry("id");
-        String bookingDateTime = enterField("date and time in yyyy-MM-dd format");
-        //String bookingReturnDateTime = enterField("return date and time in yyyy-MM-dd format");
+        String bookingDateTime = loopUntilValidDateEntry();
         String bookingComputerType = loopUntilValidComputerTypeEntry("computer type (Desktop, Laptop or Raspberry Pi)");
         String bookingAssetTag = enterField("asset tag");
         String bookingStudentID = enterField("student id");
@@ -99,34 +100,38 @@ public class ComputerBookingDB {
             }
 
             System.out.println("Please enter a replacement value");
-            String replacementInput = keyboard.nextLine();
 
             editMenu = ComputerBookingEditMenu.values()[fieldSelected];
             switch (editMenu) {
                 case ID:
-
-                    System.out.println(Colours.GREEN + "Edited " + bookingToEdit.getID() + "'s ID from " + bookingToEdit.getID() + " to " + replacementInput + Colours.RESET);
-                    bookingToEdit.bookingID = replacementInput;
+                    String bookingID = loopUntilValidIDEntry("id");
+                    System.out.println(Colours.GREEN + "Edited " + bookingToEdit.getID() + "'s ID from " + bookingToEdit.getID() + " to " + bookingID + Colours.RESET);
+                    bookingToEdit.bookingID = bookingID;
                     break;
                 case DATE_AND_TIME:
-                    System.out.println(Colours.GREEN + "Edited " + bookingToEdit.getID() + "'s DATE AND TIME from " + bookingToEdit.getDateTime() + " to " + replacementInput + Colours.RESET);
-                    bookingToEdit.bookingDateTime = replacementInput;
+                    String bookingDateTime = loopUntilValidDateEntry();
+                    System.out.println(Colours.GREEN + "Edited " + bookingToEdit.getID() + "'s DATE AND TIME from " + bookingToEdit.getDateTime() + " to " + bookingDateTime + Colours.RESET);
+                    bookingToEdit.bookingDateTime = bookingDateTime;
                     break;
                 case RETURN_DATE_AND_TIME:
-                    System.out.println(Colours.GREEN + "Edited " + bookingToEdit.getID() + "'s RETURN DATE AND TIME from " + bookingToEdit.getReturnDateTime() + " to " + replacementInput + Colours.RESET);
-                    bookingToEdit.returnDateTime = replacementInput;
+                    String returnBookingDateTime = loopUntilValidDateEntry();
+                    System.out.println(Colours.GREEN + "Edited " + bookingToEdit.getID() + "'s RETURN DATE AND TIME from " + bookingToEdit.getReturnDateTime() + " to " + returnBookingDateTime + Colours.RESET);
+                    bookingToEdit.returnDateTime = returnBookingDateTime;
                     break;
                 case COMPUTER_TYPE:
-                    System.out.println(Colours.GREEN + "Edited " + bookingToEdit.getID() + "'s COMPUTER TYPE from " + bookingToEdit.getComputerType() + " to " + replacementInput + Colours.RESET);
-                    bookingToEdit.computerType = replacementInput;
+                    String bookingComputerType = loopUntilValidComputerTypeEntry("computer type (Desktop, Laptop or Raspberry Pi)");
+                    System.out.println(Colours.GREEN + "Edited " + bookingToEdit.getID() + "'s COMPUTER TYPE from " + bookingToEdit.getComputerType() + " to " + bookingComputerType + Colours.RESET);
+                    bookingToEdit.computerType = bookingComputerType;
                     break;
                 case COMPUTER_ASSET_TAG:
-                    System.out.println(Colours.GREEN + "Edited " + bookingToEdit.getID() + "'s COMPUTER ASSET TAG from " + bookingToEdit.getComputerAssetTag() + " to " + replacementInput + Colours.RESET);
-                    bookingToEdit.computerAssetTag = replacementInput;
+                    String bookingAssetTag = enterField("asset tag");
+                    System.out.println(Colours.GREEN + "Edited " + bookingToEdit.getID() + "'s COMPUTER ASSET TAG from " + bookingToEdit.getComputerAssetTag() + " to " + bookingAssetTag + Colours.RESET);
+                    bookingToEdit.computerAssetTag = bookingAssetTag;
                     break;
                 case STUDENT_ID:
-                    System.out.println(Colours.GREEN + "Edited " + bookingToEdit.getID() + "'s STUDENT ID from " + bookingToEdit.getStudentID() + " to " + replacementInput + Colours.RESET);
-                    bookingToEdit.studentID = replacementInput;
+                    String bookingStudentID = enterField("student id");
+                    System.out.println(Colours.GREEN + "Edited " + bookingToEdit.getID() + "'s STUDENT ID from " + bookingToEdit.getStudentID() + " to " + bookingStudentID + Colours.RESET);
+                    bookingToEdit.studentID = bookingStudentID;
                     break;
             }
 
@@ -212,23 +217,23 @@ public class ComputerBookingDB {
         return Colours.RED + "Invalid ID" + Colours.RESET;
     }
 
-    private int loopUntilValidIntEntry(String intField){
+    private String loopUntilValidDateEntry(){
         boolean loop = true;
+
         while(loop)
         {
             try{
-                if(intField.equals("id")) {
-                    //String unhyphenated = intField.replaceAll("[-,]", "");
-                    int id = Integer.parseInt(enterField(intField));
-                    return id;
-                }
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                String inputDate = enterField("date and time in yyyy-MM-dd format");
+                dateFormat.parse(inputDate);
+                return inputDate;
             }
-            catch(NumberFormatException nfe)
+            catch(ParseException pe)
             {
-                System.out.println(Colours.RED + "Please enter an integer for this variable" + Colours.RESET);
+                System.out.println(Colours.RED + "Invalid date. Please enter a date in format yyyy-MM-dd" + Colours.RESET);
             }
         }
-        return -1;
+        return Colours.RED + "Invalid date" + Colours.RESET;
     }
 
     public void deleteBooking() {
@@ -350,7 +355,6 @@ public class ComputerBookingDB {
                 booked++;
             }
         }
-
         System.out.println(Colours.GREEN + booked + " " + type + " computers have been booked");
     }
 }

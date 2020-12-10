@@ -85,13 +85,13 @@ public class App
 
     private void doStudentMainMenuLoop(StudentDB studentDB) {
         boolean loop = true;
+        int option = -1;
         while(loop)
         {
             printStudentMainMenu();
 
             try
             {
-                int option = keyboard.nextInt();
                 String input = keyboard.nextLine();
                 if(input.isEmpty() || input.length() > 1)
                 {
@@ -159,13 +159,13 @@ public class App
 
     private void doComputerBookingMainMenuLoop(ComputerBookingDB bookingDB) {
         boolean loop = true;
+        int option = -1;
         while(loop)
         {
             printComputerBookingMainMenu();
 
             try
             {
-                int option = keyboard.nextInt();
                 String input = keyboard.nextLine();
                 if(input.isEmpty() || input.length() > 1)
                 {
@@ -175,11 +175,10 @@ public class App
                 {
                     option = Integer.parseInt(input);
                 }
-                if(option < 0 || option >= MainMenu.values().length)
+                if(option < 0 || option >= ComputerBookingMainMenu.values().length)
                 {
                     throw new IllegalArgumentException();
                 }
-                keyboard.nextLine(); //Flush the buffer
                 ComputerBookingMainMenu menuOption = ComputerBookingMainMenu.values()[option];
                 switch (menuOption)
                 {
@@ -236,13 +235,26 @@ public class App
 
     private void doStatisticsMainMenuLoop(ComputerBookingDB bookingDB) {
         boolean loop = true;
+        int option = -1;
         while(loop)
         {
             printStatisticsMainMenu();
 
             try
             {
-                int option = keyboard.nextInt();
+                String input = keyboard.nextLine();
+                if(input.isEmpty() || input.length() > 1)
+                {
+                    throw new IllegalArgumentException();
+                }
+                else
+                {
+                    option = Integer.parseInt(input);
+                }
+                if(option < 0 || option >= BookingStatsMainMenu.values().length)
+                {
+                    throw new IllegalArgumentException();
+                }
                 keyboard.nextLine(); //Flush the buffer
                 BookingStatsMainMenu menuOption = BookingStatsMainMenu.values()[option];
                 switch (menuOption)
