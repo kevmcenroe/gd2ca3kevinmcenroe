@@ -20,7 +20,7 @@ public class App
 
     private void start()
     {
-        System.out.println(Colours.GREEN + "Welcome to the playerDB App" + Colours.RESET);
+        System.out.println(Colours.GREEN + "Welcome to the App" + Colours.RESET);
         StudentDB studentDB = new StudentDB();
         studentDB.loadStudentsFromFile();
         studentDB.saveStudentsToFile();
@@ -35,7 +35,6 @@ public class App
     private void doMainMenuLoop(StudentDB studentDB, ComputerBookingDB bookingDB)
     {
         boolean loop = true;
-        MainMenu menuOption;
         int option = -1;
         while(loop)
         {
@@ -56,7 +55,8 @@ public class App
                     throw new IllegalArgumentException();
                 }
                // keyboard.nextLine(); //Flush the buffer, making it ignore Enter press
-                menuOption = MainMenu.values()[option]; // main menu enum, 0 represents one of the options
+                // main menu enum, 0 represents one of the options
+                MainMenu menuOption = MainMenu.values()[option];
                 switch (menuOption)
                 {
                     case QUIT_APPLICATION:
@@ -77,7 +77,7 @@ public class App
             }
             catch(IllegalArgumentException iae)
             {
-                System.out.println("Please enter a valid option");
+                System.out.println(Colours.RED + "Please enter a valid option" + Colours.RESET);
             }
         }
         System.out.println("Thanks for using the app");
@@ -92,6 +92,19 @@ public class App
             try
             {
                 int option = keyboard.nextInt();
+                String input = keyboard.nextLine();
+                if(input.isEmpty() || input.length() > 1)
+                {
+                    throw new IllegalArgumentException();
+                }
+                else
+                {
+                    option = Integer.parseInt(input);
+                }
+                if(option < 0 || option >= MainMenu.values().length)
+                {
+                    throw new IllegalArgumentException();
+                }
                 keyboard.nextLine(); //Flush the buffer
                 // Main Menu enum, 0 represents one of the options
                 StudentMainMenu menuOption = StudentMainMenu.values()[option];
@@ -116,7 +129,7 @@ public class App
             }
             catch(InputMismatchException ime)
             {
-                System.out.println("Please enter a valid option");
+                System.out.println(Colours.RED + "Please enter a valid option" + Colours.RESET);
             }
         }
         System.out.println(Colours.GREEN + "Thanks for using the app" + Colours.RESET);
@@ -153,6 +166,19 @@ public class App
             try
             {
                 int option = keyboard.nextInt();
+                String input = keyboard.nextLine();
+                if(input.isEmpty() || input.length() > 1)
+                {
+                    throw new IllegalArgumentException();
+                }
+                else
+                {
+                    option = Integer.parseInt(input);
+                }
+                if(option < 0 || option >= MainMenu.values().length)
+                {
+                    throw new IllegalArgumentException();
+                }
                 keyboard.nextLine(); //Flush the buffer
                 ComputerBookingMainMenu menuOption = ComputerBookingMainMenu.values()[option];
                 switch (menuOption)
@@ -185,13 +211,13 @@ public class App
                         bookingDB.returnBooking();
                         break;
                     case PRINT_BOOKING_STATISTICS:
-
+                        doStatisticsMainMenuLoop(bookingDB);
                         break;
                 }
             }
             catch(InputMismatchException ime)
             {
-                System.out.println("Please enter a valid option");
+                System.out.println(Colours.RED + "Please enter a valid option" + Colours.RESET);
             }
         }
         System.out.println(Colours.GREEN + "Thanks for using the app" + Colours.RESET);
@@ -218,11 +244,11 @@ public class App
             {
                 int option = keyboard.nextInt();
                 keyboard.nextLine(); //Flush the buffer
-                // Main Menu enum, 0 represents one of the options
                 BookingStatsMainMenu menuOption = BookingStatsMainMenu.values()[option];
                 switch (menuOption)
                 {
                     case QUIT_STATISTICS_MENU:
+                        doComputerBookingMainMenuLoop(bookingDB);
                         break;
                     case DESKTOPS_BOOKED:
                         bookingDB.printComputerTypeBooked("Desktop");

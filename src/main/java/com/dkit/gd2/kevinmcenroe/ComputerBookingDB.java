@@ -351,6 +351,6 @@ public class ComputerBookingDB {
             }
         }
 
-        System.out.println(Colours.GREEN + booked + " computers of type " + type + " have been booked");
+        System.out.println(Colours.GREEN + booked + " " + type + " computers have been booked");
     }
 }
