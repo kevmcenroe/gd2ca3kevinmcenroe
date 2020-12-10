@@ -11,4 +11,27 @@ public class Laptop extends Computer{
         this.screenSizeInches = screenSizeInches;
         this.batteryLifeHours = batteryLifeHours;
     }
+
+    @Override
+    public String toString() {
+        return "Laptop{" +
+                "screenSizeInches=" + screenSizeInches +
+                ", batteryLifeHours=" + batteryLifeHours +
+                ", manufacturer='" + manufacturer + '\'' +
+                ", processor='" + processor + '\'' +
+                ", ramSizeGB=" + ramSizeGB +
+                ", diskSizeGB=" + diskSizeGB +
+                ", weight=" + weight +
+                ", assetTag='" + assetTag + '\'' +
+                ", purchaseDate='" + purchaseDate + '\'' +
+                '}';
+    }
+
+    public double getScreenSizeInches() {
+        return screenSizeInches;
+    }
+
+    public int getBatteryLifeHours() {
+        return batteryLifeHours;
+    }
 }

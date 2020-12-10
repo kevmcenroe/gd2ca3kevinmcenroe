@@ -9,4 +9,22 @@ public class Desktop extends Computer {
         super(manufacturer, processor, ramSizeGB, diskSizeGB, weight, assetTag, purchaseDate);
         this.hasMonitor = hasMonitor;
     }
+
+    @Override
+    public String toString() {
+        return "Desktop{" +
+                "hasMonitor=" + hasMonitor +
+                ", manufacturer='" + manufacturer + '\'' +
+                ", processor='" + processor + '\'' +
+                ", ramSizeGB=" + ramSizeGB +
+                ", diskSizeGB=" + diskSizeGB +
+                ", weight=" + weight +
+                ", assetTag='" + assetTag + '\'' +
+                ", purchaseDate='" + purchaseDate + '\'' +
+                '}';
+    }
+
+    public boolean hasMonitor() {
+        return hasMonitor;
+    }
 }

@@ -10,4 +10,27 @@ public class RaspberryPi extends Computer {
         this.gpioPins = gpioPins;
         this.sdStorageCapacity = sdStorageCapacity;
     }
+
+    @Override
+    public String toString() {
+        return "RaspberryPi{" +
+                "gpioPins=" + gpioPins +
+                ", sdStorageCapacity=" + sdStorageCapacity +
+                ", manufacturer='" + manufacturer + '\'' +
+                ", processor='" + processor + '\'' +
+                ", ramSizeGB=" + ramSizeGB +
+                ", diskSizeGB=" + diskSizeGB +
+                ", weight=" + weight +
+                ", assetTag='" + assetTag + '\'' +
+                ", purchaseDate='" + purchaseDate + '\'' +
+                '}';
+    }
+
+    public int getGpioPins() {
+        return gpioPins;
+    }
+
+    public int getSdStorageCapacity() {
+        return sdStorageCapacity;
+    }
 }

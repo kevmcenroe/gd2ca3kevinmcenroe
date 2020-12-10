@@ -19,4 +19,45 @@ public class Computer {
         this.assetTag = assetTag;
         this.purchaseDate = purchaseDate;
     }
+
+    @Override
+    public String toString() {
+        return "Computer{" +
+                "manufacturer='" + manufacturer + '\'' +
+                ", processor='" + processor + '\'' +
+                ", ramSizeGB=" + ramSizeGB +
+                ", diskSizeGB=" + diskSizeGB +
+                ", weight=" + weight +
+                ", assetTag='" + assetTag + '\'' +
+                ", purchaseDate='" + purchaseDate + '\'' +
+                '}';
+    }
+
+    public String getManufacturer() {
+        return manufacturer;
+    }
+
+    public String getProcessor() {
+        return processor;
+    }
+
+    public int getRamSizeGB() {
+        return ramSizeGB;
+    }
+
+    public int getDiskSizeGB() {
+        return diskSizeGB;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
+    public String getAssetTag() {
+        return assetTag;
+    }
+
+    public String getPurchaseDate() {
+        return purchaseDate;
+    }
 }
