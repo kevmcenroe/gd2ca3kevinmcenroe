@@ -85,17 +85,16 @@ public class App
 
     private void doStudentMainMenuLoop(StudentDB studentDB) {
         boolean loop = true;
-        StudentMainMenu menuOption;
-        int option;
         while(loop)
         {
             printStudentMainMenu();
 
             try
             {
-                option = keyboard.nextInt();
+                int option = keyboard.nextInt();
                 keyboard.nextLine(); //Flush the buffer
-                menuOption = StudentMainMenu.values()[option]; // Main Menu enum, 0 represents one of the options
+                // Main Menu enum, 0 represents one of the options
+                StudentMainMenu menuOption = StudentMainMenu.values()[option];
                 switch (menuOption)
                 {
                     case QUIT_STUDENT_MENU:
@@ -125,47 +124,37 @@ public class App
 
     private void printMainMenu()
     {
-        System.out.println("\nOptions to select:");
+        System.out.println("\nMenu Options:");
         for(int i=0; i < MainMenu.values().length; i++)
         {
-            System.out.println("\t" + Colours.BLUE + i + ". " + MainMenu.values()[i].toString() + Colours.RESET);
+            String menuOption = MainMenu.values()[i].toString().replaceAll("_", " ");
+            System.out.println("\t" + Colours.BLUE + i + ". " + menuOption + Colours.RESET);
         }
-        System.out.println("Enter a number to select an option");
+        System.out.println("Enter the corresponding number to select an option");
     }
 
     public static void printStudentMainMenu()
     {
-        System.out.println("\nOptions to select:");
+        System.out.println("\nMenu Options:");
         for(int i=0; i < StudentMainMenu.values().length; i++)
         {
-            System.out.println("\t" + Colours.BLUE + i + ". " + StudentMainMenu.values()[i].toString() + Colours.RESET);
-        }
-        System.out.println("Enter a number to select an option");
-    }
-
-    private void printComputerBookingMainMenu()
-    {
-        System.out.println("\n Menu Options:");
-        for(int i=0; i < ComputerBookingMainMenu.values().length; i++)
-        {
-            System.out.println("\t" + Colours.BLUE + i + ". " + ComputerBookingMainMenu.values()[i].toString() + Colours.RESET);
+            String menuOption = StudentMainMenu.values()[i].toString().replaceAll("_", " ");
+            System.out.println("\t" + Colours.BLUE + i + ". " + menuOption + Colours.RESET);
         }
         System.out.println("Enter the corresponding number to select an option");
     }
 
     private void doComputerBookingMainMenuLoop(ComputerBookingDB bookingDB) {
         boolean loop = true;
-        ComputerBookingMainMenu menuOption;
-        int option;
         while(loop)
         {
             printComputerBookingMainMenu();
 
             try
             {
-                option = keyboard.nextInt();
+                int option = keyboard.nextInt();
                 keyboard.nextLine(); //Flush the buffer
-                menuOption = ComputerBookingMainMenu.values()[option];
+                ComputerBookingMainMenu menuOption = ComputerBookingMainMenu.values()[option];
                 switch (menuOption)
                 {
                     case QUIT_BOOKING_MENU:
@@ -195,6 +184,9 @@ public class App
                     case RETURN_BOOKED_COMPUTER:
                         bookingDB.returnBooking();
                         break;
+                    case PRINT_BOOKING_STATISTICS:
+
+                        break;
                 }
             }
             catch(InputMismatchException ime)
@@ -203,5 +195,62 @@ public class App
             }
         }
         System.out.println(Colours.GREEN + "Thanks for using the app" + Colours.RESET);
+    }
+
+    private void printComputerBookingMainMenu()
+    {
+        System.out.println("\nMenu Options:");
+        for(int i=0; i < ComputerBookingMainMenu.values().length; i++)
+        {
+            String menuOption = ComputerBookingMainMenu.values()[i].toString().replaceAll("_", " ");
+            System.out.println("\t" + Colours.BLUE + i + ". " + menuOption + Colours.RESET);
+        }
+        System.out.println("Enter the corresponding number to select an option");
+    }
+
+    private void doStatisticsMainMenuLoop(ComputerBookingDB bookingDB) {
+        boolean loop = true;
+        while(loop)
+        {
+            printStatisticsMainMenu();
+
+            try
+            {
+                int option = keyboard.nextInt();
+                keyboard.nextLine(); //Flush the buffer
+                // Main Menu enum, 0 represents one of the options
+                BookingStatsMainMenu menuOption = BookingStatsMainMenu.values()[option];
+                switch (menuOption)
+                {
+                    case QUIT_STATISTICS_MENU:
+                        break;
+                    case DESKTOPS_BOOKED:
+                        bookingDB.printComputerTypeBooked("Desktop");
+                        break;
+                    case LAPTOPS_BOOKED:
+                        bookingDB.printComputerTypeBooked("Laptop");
+                        break;
+                    case RASPBERRY_PIs_BOOKED:
+                        bookingDB.printComputerTypeBooked("Raspberry Pi");
+                        break;
+                }
+            }
+            catch(InputMismatchException ime)
+            {
+                System.out.println("Please enter a valid option");
+            }
+        }
+        System.out.println(Colours.GREEN + "Thanks for using the app" + Colours.RESET);
+    }
+
+    private void printStatisticsMainMenu()
+    {
+        System.out.println("\nMenu Options:");
+        for(int i=0; i < BookingStatsMainMenu.values().length; i++)
+        {
+            String menuOption = BookingStatsMainMenu.values()[i].toString().replaceAll("_", " ");
+            System.out.println("\t" + Colours.BLUE + i + ". " + menuOption + Colours.RESET);
+        }
+        System.out.println("Enter the corresponding number to select an option");
     }
 }

@@ -55,39 +55,12 @@ public class ComputerBookingDB {
         }
     }
 
-    public void deleteBookingsFromFile(ComputerBooking booking)
-    {
-        // POSSIBLE FIX - Don't create a new fileWriter, line below was originally a bw?
-        // This new solution still doesn't do the trick. Try passing bufferedWriter / reader in?
-        try(BufferedReader bookingsFile = new BufferedReader(new FileReader("bookings.txt"))) {
-            //BufferedReader bufferedWriter = new BufferedReader(new FileReader("bookings.txt"));
-            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("bookings.txt"));
-
-            String currentLine;
-            String bookingLine = booking.getID() + "," + booking.getDateTime() + "," + booking.getReturnDateTime() + "," + booking.getComputerType() + ","  +booking.getComputerAssetTag() + "," + booking.getStudentID();
-
-            // While there are lines to read
-            while((currentLine = bookingsFile.readLine()) != null){
-                String trimmedLine = currentLine.trim();
-                if(trimmedLine.equals(bookingLine)){
-                    currentLine = "";
-                }
-                bufferedWriter.write(currentLine + System.getProperty("line.separator")); // Essentially adding a new blank line after the current one using "\n"
-
-            }
-        }
-        catch(IOException ioe)
-        {
-            System.out.println(Colours.RED + "Could not save the bookings" +Colours.RESET);
-        }
-    }
-
     public void addBooking() {
         System.out.println(Colours.GREEN + "Adding booking..." + Colours.RESET);
         String bookingID = loopUntilValidIDEntry("id");
         String bookingDateTime = enterField("date and time in yyyy-MM-dd format");
         //String bookingReturnDateTime = enterField("return date and time in yyyy-MM-dd format");
-        String bookingComputerType = enterField("computer type");
+        String bookingComputerType = loopUntilValidComputerTypeEntry("computer type (Desktop, Laptop or Raspberry Pi)");
         String bookingAssetTag = enterField("asset tag");
         String bookingStudentID = enterField("student id");
 
@@ -204,18 +177,36 @@ public class ComputerBookingDB {
             try{
                 String inputID = enterField(idField);
 
-                if(checkBookingIDValidity(inputID)){
-
+                if(checkBookingIDValidity(inputID))
                     return inputID;
-                }
                 else
-                {
                     throw new IOException("Invalid ID");
-                }
             }
             catch(IOException ioe)
             {
                 System.out.println(Colours.RED + "ID already in use. Please enter a unique ID" + Colours.RESET);
+            }
+        }
+        return Colours.RED + "Invalid ID" + Colours.RESET;
+    }
+
+    private String loopUntilValidComputerTypeEntry(String typeField){
+        boolean loop = true;
+
+        while(loop)
+        {
+            try{
+                String inputID = enterField("computer type (Desktop, Laptop or Raspberry Pi)");
+
+                if(inputID.equals("Desktop") || inputID.equals("Laptop") || inputID.equals("Raspberry Pi")) {
+                    return inputID;
+                }
+                else
+                    throw new IOException("Invalid computer type");
+            }
+            catch(IOException ioe)
+            {
+                System.out.println(Colours.RED + "Invalid computer type. Please enter one of the following options: \nDesktop \nLaptop \nRaspberry Pi" + Colours.RESET);
             }
         }
         return Colours.RED + "Invalid ID" + Colours.RESET;
@@ -250,7 +241,7 @@ public class ComputerBookingDB {
             if(bookingToDelete != null)
             {
                 bookings.remove(bookingToDelete);
-                deleteBookingsFromFile(bookingToDelete);
+                saveBookingsToFile();
                 System.out.println(Colours.GREEN + "Deleted " + bookingToDelete + Colours.RESET);
             }
             else
@@ -347,5 +338,19 @@ public class ComputerBookingDB {
         long averageLength = sum / bookings.size();
 
         System.out.println(Colours.GREEN + "Average booking length is " + averageLength + " days" + Colours.RESET);
+    }
+
+    public void printComputerTypeBooked(String type)
+    {
+        int booked = 0;
+        for(ComputerBooking booking : bookings)
+        {
+            if(booking.getComputerType().equals(type))
+            {
+                booked++;
+            }
+        }
+
+        System.out.println(Colours.GREEN + booked + " computers of type " + type + " have been booked");
     }
 }
