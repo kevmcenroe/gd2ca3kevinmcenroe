@@ -3,6 +3,7 @@ package com.dkit.gd2.kevinmcenroe;
 import java.time.LocalDate;
 import java.util.Comparator;
 
+// Use of Comparator. See ComputerBooking class for use of Comparable
 public class DateTimeComparison implements Comparator<ComputerBooking> {
 
     @Override

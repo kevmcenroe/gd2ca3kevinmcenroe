@@ -1,9 +1,10 @@
 // Kevin McEnroe D00242092
 package com.dkit.gd2.kevinmcenroe;
 
+import java.time.LocalDate;
 import java.util.Date;
 
-public class ComputerBooking {
+public class ComputerBooking implements Comparable {
     String bookingID;
     String bookingDateTime;
     String returnDateTime;
@@ -54,5 +55,24 @@ public class ComputerBooking {
 
     public String getStudentID() {
         return studentID;
+    }
+
+    // Use of Comparable:
+    @Override
+    public int compareTo(Object otherBooking) {
+        LocalDate bookingOneDateTime = LocalDate.parse(this.getDateTime());
+        LocalDate bookingTwoDateTime = LocalDate.parse(((ComputerBooking)otherBooking).getDateTime());
+
+        if(bookingOneDateTime.isBefore(bookingTwoDateTime))
+        {
+            return -1;
+        }
+        if(bookingOneDateTime.isAfter(bookingTwoDateTime))
+        {
+            return 1;
+        }
+        else
+            return 0;
+
     }
 }

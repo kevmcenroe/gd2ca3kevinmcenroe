@@ -308,7 +308,10 @@ public class ComputerBookingDB {
         if(matchesFound != 0)
         {
             DateTimeComparison dateTimeCompare = new DateTimeComparison();
-            Collections.sort(studentBookings, dateTimeCompare);     // Use the comparator to sort the times using dateTimeCompare
+            Collections.sort(studentBookings);
+
+            //If you want to use the Comparator instead of Comparable, do this:
+            //Collections.sort(studentBookings, dateTimeCompare);
 
             for(ComputerBooking sortedBooking : studentBookings)
             {
