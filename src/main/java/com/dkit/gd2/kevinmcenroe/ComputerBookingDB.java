@@ -137,10 +137,6 @@ public class ComputerBookingDB {
 
             saveBookingsToFile();
         }
-        else
-        {
-            System.out.println(Colours.RED + "This booking ID does not exist" + Colours.RESET);
-        }
     }
 
     // Checks that the ID is unique, in turn preventing duplicate bookings
@@ -327,25 +323,30 @@ public class ComputerBookingDB {
     public void printAverageBookingLength()
     {
         // Create an array of equal size to bookings, i.e. for 1 length value per booking
-        long[] bookingLengths = new long[bookings.size()];
-        int lengthsRegistered = 0;
-        for(ComputerBooking booking : bookings)
+        if(bookings.size() > 0) {
+            long[] bookingLengths = new long[bookings.size()];
+            int lengthsRegistered = 0;
+            for (ComputerBooking booking : bookings) {
+                LocalDate lendDate = LocalDate.parse(booking.getDateTime());
+                LocalDate returnDate = LocalDate.parse(booking.getReturnDateTime());
+                long bookingLength = ChronoUnit.DAYS.between(lendDate, returnDate);
+                System.out.println("Length of booking of ID " + booking.getID() + ": " + bookingLength + " days");
+                bookingLengths[lengthsRegistered] = bookingLength;
+                lengthsRegistered++;
+            }
+
+            long sum = 0;
+            for (long length : bookingLengths) {
+                sum += length;
+            }
+            long averageLength = sum / bookings.size();
+
+            System.out.println(Colours.GREEN + "Average booking length is " + averageLength + " days" + Colours.RESET);
+        }
+        else
         {
-            LocalDate lendDate = LocalDate.parse(booking.getDateTime());
-            LocalDate returnDate = LocalDate.parse(booking.getReturnDateTime());
-            long bookingLength = ChronoUnit.DAYS.between(lendDate, returnDate);
-            System.out.println("Length of booking of ID " + booking.getID() + ": " + bookingLength + " days");
-            bookingLengths[lengthsRegistered] = bookingLength;
-            lengthsRegistered++;
+            System.out.println(Colours.RED + "Cannot print average booking length as no bookings exist. Please create bookings" + Colours.RESET);
         }
-
-        long sum = 0;
-        for(long length : bookingLengths){
-            sum += length;
-        }
-        long averageLength = sum / bookings.size();
-
-        System.out.println(Colours.GREEN + "Average booking length is " + averageLength + " days" + Colours.RESET);
     }
 
     public void printComputerTypeBooked(String type)

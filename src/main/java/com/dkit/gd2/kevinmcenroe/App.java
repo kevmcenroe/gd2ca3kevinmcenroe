@@ -255,7 +255,6 @@ public class App
                 {
                     throw new IllegalArgumentException();
                 }
-                keyboard.nextLine(); //Flush the buffer
                 BookingStatsMainMenu menuOption = BookingStatsMainMenu.values()[option];
                 switch (menuOption)
                 {
