@@ -128,7 +128,7 @@ public class StudentDB {
         }
         else
         {
-            System.out.println(Colours.RED + "This student name does not exist" + Colours.RESET);
+            System.out.println(Colours.RED + "This student id does not exist" + Colours.RESET);
             //editStudent();  // Recursion
         }
     }
