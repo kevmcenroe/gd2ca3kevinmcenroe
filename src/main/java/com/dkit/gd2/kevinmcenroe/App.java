@@ -101,11 +101,11 @@ public class App
                 {
                     option = Integer.parseInt(input);
                 }
-                if(option < 0 || option >= MainMenu.values().length)
+                if(option < 0 || option >= StudentMainMenu.values().length)
                 {
                     throw new IllegalArgumentException();
                 }
-                keyboard.nextLine(); //Flush the buffer
+                //keyboard.nextLine(); //Flush the buffer
                 // Main Menu enum, 0 represents one of the options
                 StudentMainMenu menuOption = StudentMainMenu.values()[option];
                 switch (menuOption)
@@ -259,7 +259,7 @@ public class App
                 switch (menuOption)
                 {
                     case QUIT_STATISTICS_MENU:
-                        doComputerBookingMainMenuLoop(bookingDB);
+                        loop = false;
                         break;
                     case DESKTOPS_BOOKED:
                         bookingDB.printComputerTypeBooked("Desktop");
